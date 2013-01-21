@@ -1,0 +1,125 @@
+<html>
+<head>
+	<link rel="stylesheet" href="css/bootstrap.css">
+	<link rel="stylesheet" href="css/prettify.css">
+	<script src="js/jquery-1.9.0.min.js"></script>
+	<script src="js/bootstrap-tooltip.js"></script>
+	<script src="js/bootstrap-popover.js"></script>
+	<script src="js/underscore-min.js"></script>
+	<script src="js/backbone-min.js"></script>
+	<script src="js/comment.js"></script>
+	<script src="js/prettify.js"></script>
+
+	<script>
+		var Person = Backbone.Model.extend({
+			name:'person',
+			displayName: function(){
+				return this.get('first_name')+' '+this.get('last_name');
+			}
+		});
+
+		
+
+		var PersonCollection = Backbone.Collection.extend({
+			model : Person,
+		});
+		var personCollection = new PersonCollection();
+
+		currentUser = new Person({'id':1, 'first_name':'Eddie', 'last_name':'Anderson'})
+		personCollection.add(currentUser)
+
+		var tempCommentsCollection=[{'object':'AnyObject',
+									'object_id':1,
+									'comment':'test',
+									'person_id':1}]
+								
+		commentCollection.add(tempCommentsCollection)
+	</script>
+</head>
+<body onload="prettyPrint()">
+	<div class="container">
+		<div style="margin-top:20px" class="hero-unit">
+			<div class="row">
+				<div class="span-6">
+					<h1>Object-Comment</h1>
+					<p ><br/>Easily add comments to any Backbone.js model<br/>
+						<a href="https://process-smith.com">As used in Process Smith</a>
+					</p>
+					
+				</div>
+				<div class="span-4 pull-right">
+					<img width=200 src="img/comment.png"/>
+				</div>
+			</div>
+			
+		</div>
+
+		<p class="lead">
+			<h4>Project Setup</h4>
+			<ul>
+				<li>Add the following libraries: jQuery, bootstrap, underscore.js, backbone.js, and <a href="https://github.com/fasteddie31003/bootstrap">this bootstrap fork</a></li>
+				<li>Your project needs a backend that can save the Comment  model</li>
+				<li>Your project needs to implament a Person model</li>
+			</ul>
+
+		</p>
+  	
+
+	  	<div>
+	  		<h4>Usage examples</h4>
+	  		<ul class="thumbnails">
+			  <li class="span6">
+			    <div class="thumbnail">
+			      
+			      <h3>Comment button</h3>
+			      <p>Attach this button to a list of objects.</p>
+			      <span id="commentButton">
+
+			      </span>
+			      <br/> <br/>
+			      <pre class="prettyprint">
+var commentButtonView= new ThreadView(
+	{el:$('#commentButton'),
+	objectName: 'AnyObject',
+	objectId: 1});
+			      </pre>
+			      <script>
+			      	var commentButtonView= new ThreadView({el:$('#commentButton'),
+								objectName: 'AnyObject',
+								objectId: 1});
+			      </script>
+			    </div>
+			  </li>
+
+			  <li class="span6">
+			    <div class="thumbnail">
+			      
+			      <h3>Comment list</h3>
+			      <p>Creates a list of comments.</p>
+			      <div id="commentList">
+			      </div>
+			      <br/><br/>
+			      <pre class="prettyprint">
+var commentBoxView= new CommentBoxView(
+	{el:$('#commentButton'),
+	objectName: 'AnyObject',
+	objectId: 1});
+			      </pre>
+			      <script>
+			      	var commentButtonView= new CommentBoxView({el:$('#commentList'),
+								objectName: 'AnyObject',
+								objectId: 1});
+			      </script>
+
+			    </div>
+			  </li>
+			  
+			</ul>
+	  	</div>
+
+  	</div>
+  	<script>
+
+  	</script>
+</body>
+</html>
