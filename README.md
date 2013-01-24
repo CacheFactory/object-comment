@@ -3,9 +3,9 @@
 
 A backbone component to have user comments on any backbone model.
 
-[Project Site](https://process-smith.com/object-comment)
+Check a demo out at the [Project Site](https://process-smith.com/object-comment)
 
----
+
 
 ###Uses
 ---
@@ -21,6 +21,7 @@ Your app also needs some kind of user model and specify it in the settings objec
 
 
 Setup the settings object and create an ObjectComment instance.
+---
  ```javascript
  var objectCommentSettings={
 	PERSON_MODEL:'Person',
@@ -46,8 +47,7 @@ var commentButtonView= new objectComment.threadView(
 
 or the comment list style
 ```javascript
-var commentBoxView= new objectComment.commentBoxView(
-	{el:$('#commentButton'),
+var commentButtonView= new objectComment.commentBoxView({el:$('#commentList'),
 	objectName: 'AnyObject',
 	objectId: 1});
 ```
