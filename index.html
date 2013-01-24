@@ -28,12 +28,32 @@
 		currentUser = new Person({'id':1, 'first_name':'Eddie', 'last_name':'Anderson'})
 		personCollection.add(currentUser)
 
+
+
 		var tempCommentsCollection=[{'object':'AnyObject',
 									'object_id':1,
+									'created':'2013-01-17 03:50:47',
 									'comment':'test',
 									'person_id':1}]
-								
-		commentCollection.add(tempCommentsCollection)
+			
+
+		var objectCommentSettings={
+			PERSON_MODEL:'Person',
+			PERSON_COLLECTION:'personCollection',
+			PERSON_DISPLAY_NAME_FUNCTION:function(model){
+				return model.get('first_name')+' '+model.get('last_name')
+			},
+			COMMENT_URL:'/',
+			CURRENT_USER: currentUser,
+			COMMENTS: tempCommentsCollection
+		}
+
+		var objectComment= new ObjectComment(objectCommentSettings);
+
+		
+
+
+
 	</script>
 </head>
 <body onload="prettyPrint()">
@@ -57,9 +77,28 @@
 		<p class="lead">
 			<h4>Project Setup</h4>
 			<ul>
-				<li>Add the following libraries: jQuery, bootstrap, underscore.js, backbone.js, and <a href="https://github.com/fasteddie31003/bootstrap">this bootstrap fork</a></li>
-				<li>Your project needs a backend that can save the Comment  model</li>
-				<li>Your project needs to implament a Person model</li>
+				<li>Add the following libraries: jQuery, bootstrap, underscore.js, backbone.js, and <a href="https://github.com/fasteddie31003/bootstrap">this bootstrap fork</a>.</li>
+				<li>Your project needs a backend that can save a Comment  model.<span style="font-weight:800">This demo does not have a backend and therefore will error when you save a comment.</span></li>
+				<li>Your project needs to implement some kind of user model.</li>
+				<li>Create the settings object with your app's values.<br/>
+					<pre class="prettyprint" style="width:600px;">
+var objectCommentSettings={
+	PERSON_MODEL:'Person',
+	PERSON_COLLECTION:'personCollection',
+	PERSON_DISPLAY_NAME_FUNCTION:function(model){
+		return model.get('first_name')+' '+model.get('last_name')
+	},
+	COMMENT_URL:'/',
+	CURRENT_USER: currentUser,
+	COMMENTS: tempCommentsCollection 
+}					</pre>
+
+				</li>
+				<li>Create a new ObjectComment object with the settings object<br/>
+					<pre class="prettyprint" style="width:600px;">
+var objectComment= new ObjectComment(objectCommentSettings); </pre>
+				</li>
+				
 			</ul>
 
 		</p>
@@ -78,13 +117,12 @@
 			      </span>
 			      <br/> <br/>
 			      <pre class="prettyprint">
-var commentButtonView= new ThreadView(
+var commentButtonView= new objectComment.threadView(
 	{el:$('#commentButton'),
 	objectName: 'AnyObject',
-	objectId: 1});
-			      </pre>
+	objectId: 1});</pre>
 			      <script>
-			      	var commentButtonView= new ThreadView({el:$('#commentButton'),
+			      	var commentButtonView= new objectComment.threadView({el:$('#commentButton'),
 								objectName: 'AnyObject',
 								objectId: 1});
 			      </script>
@@ -100,13 +138,12 @@ var commentButtonView= new ThreadView(
 			      </div>
 			      <br/><br/>
 			      <pre class="prettyprint">
-var commentBoxView= new CommentBoxView(
+var commentBoxView= new objectComment.commentBoxView(
 	{el:$('#commentButton'),
 	objectName: 'AnyObject',
-	objectId: 1});
-			      </pre>
+	objectId: 1});</pre>
 			      <script>
-			      	var commentButtonView= new CommentBoxView({el:$('#commentList'),
+			      	var commentButtonView= new objectComment.commentBoxView({el:$('#commentList'),
 								objectName: 'AnyObject',
 								objectId: 1});
 			      </script>
