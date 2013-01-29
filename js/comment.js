@@ -25,6 +25,8 @@ var ObjectComment= function(objectCommentSettings){
 			return -1*model.get('id');
 		}
 	});
+
+
 	var commentCollection = new CommentCollection();
 
 
@@ -90,11 +92,6 @@ var ObjectComment= function(objectCommentSettings){
 			},
 		
 		  initialize: function(){
-		  		var self =this
-				this.comments=commentCollection.filter(function(model){
-					return model.get('object')==self.options.objectName && model.get('object_id')==self.options.objectId
-				}).sort()
-	 
 
 				this.render();
 
@@ -103,6 +100,11 @@ var ObjectComment= function(objectCommentSettings){
 		  render: function() {
 			var self=this;
 			var klass= 'label-info';
+
+			this.comments=commentCollection.filter(function(model){
+				return model.get('object')==self.options.objectName && model.get('object_id')==self.options.objectId
+			}).sort()
+
 			var count = _.size(this.comments)>0? _.size(this.comments): ''
 
 			$(this.el).html('<span class="commentsClicked label '+klass+'" style="cursor:pointer; margin-left:5px;"><i class="icon-comment icon-white"></i>'+count+'</span>');
@@ -114,6 +116,7 @@ var ObjectComment= function(objectCommentSettings){
 
 		
 			commentsClicked: function(){
+				var self=this
 				var popoverHtml=$('<div><div class="upperComment"></div><div class="lowerComment"></div></div>');
 				
 				$(this.el).removeData('popover')
@@ -137,6 +140,7 @@ var ObjectComment= function(objectCommentSettings){
 																callback:function(){
 																	commentsView.populateComments();
 																	commentsView.render();
+																	self.render()
 																}
 															})
 
@@ -172,6 +176,9 @@ var ObjectComment= function(objectCommentSettings){
 				object: this.options.objectName
 				//Person:atPeople
 			});
+			if(objectCommentSettings.SET_TIME_STAMP){
+				newComment.set('created', createMysqlTimeStamp( new Date()))
+			}
 			commentCollection.add(newComment)
 
 			newComment.save(null,{error:function(response,model){
@@ -272,6 +279,21 @@ var ObjectComment= function(objectCommentSettings){
 			$(this.el).html(html)
 		}
 	});
+
+	function createMysqlTimeStamp( dateobj )
+	{
+		var date = new Date( dateobj );
+		var yyyy = date.getFullYear();
+	    var mm = date.getMonth() + 1;
+	    var dd = date.getDate();
+	    var hh = date.getHours();
+	    var min = date.getMinutes();
+	    var ss = date.getSeconds();
+	 
+		var mysqlDateTime = yyyy + '-' + mm + '-' + dd + ' ' + hh + ':' + min + ':' + ss;
+	 
+	    return mysqlDateTime;
+	}
 
 	/*
 	var AtSelector= Backbone.View.extend({
@@ -383,9 +405,8 @@ var ObjectComment= function(objectCommentSettings){
 		return monthFormatted+'-'+date.getDate()+'-'+yearFormatted+ ' at '+get12Hours(date.getHours())+':'+minutesFormatted+getAmPm(date.getHours());	
 	}
 
-	commentCollection.add(objectCommentSettings.COMMENTS)
-
-	this.commentCollection=commentCollection;
+	commentCollection.add(objectCommentSettings.COMMENTS_ARRAY);
+	this.commentCollection=commentCollection
 	this.commentBoxView =CommentBoxView;
 	this.threadView=ThreadView;
 }

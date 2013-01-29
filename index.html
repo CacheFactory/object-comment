@@ -6,7 +6,8 @@
 	<script src="js/bootstrap-tooltip.js"></script>
 	<script src="js/bootstrap-popover.js"></script>
 	<script src="js/underscore-min.js"></script>
-	<script src="js/backbone-min.js"></script>
+	<script src="js/backbone.js"></script>
+	<script src="js/backbone-localStorage.js"></script>
 	<script src="js/comment.js"></script>
 	<script src="js/prettify.js"></script>
 
@@ -30,12 +31,26 @@
 
 
 
-		var tempCommentsCollection=[{'object':'AnyObject',
-									'object_id':1,
-									'created':'2013-01-17 03:50:47',
-									'comment':'test',
-									'person_id':1}]
-			
+		var comments= [{'object':'AnyObject',
+						'object_id':1,
+						'created':'2013-01-17 03:50:47',
+						'comment':'test',
+						'person_id':1}]
+/*
+		var CommentCollection = Backbone.Collection.extend({
+			model : Comment,
+			comparator:function(model){
+				return -1*model.get('id');
+			},
+			localStorage: new Backbone.LocalStorage("CommentCollection"),
+		});
+
+		var commentCollection = new CommentCollection();
+
+		commentCollection.add(tempCommentsCollection)
+*/		
+
+				
 
 		var objectCommentSettings={
 			PERSON_MODEL:'Person',
@@ -45,10 +60,13 @@
 			},
 			COMMENT_URL:'/',
 			CURRENT_USER: currentUser,
-			COMMENTS: tempCommentsCollection
+			COMMENTS_ARRAY: comments,
+			SET_TIME_STAMP:true
 		}
 
 		var objectComment= new ObjectComment(objectCommentSettings);
+		objectComment.commentCollection.localStorage= new Backbone.LocalStorage("commentsLocalStorage")
+		objectComment.commentCollection.fetch()
 
 		
 
@@ -78,8 +96,9 @@
 			<h4>Project Setup</h4>
 			<ul>
 				<li>Add the following libraries: jQuery, bootstrap, underscore.js, backbone.js, and <a href="https://github.com/fasteddie31003/bootstrap">this bootstrap fork</a>.</li>
-				<li>Your project needs a backend that can save a Comment  model.<span style="font-weight:800">This demo does not have a backend and therefore will error when you save a comment.</span></li>
-				<li>Your project needs to implement some kind of user model.</li>
+				<li>Your project needs a backend that can save a Comment model. <span style="font-weight:800">This demo uses local storage for saving comments.</span></li>
+				<li>The Comment model must have both "object" and "object_id" fields</li>
+				<li>Your project needs to implement some kind of user model, which is specified in the settings.</li>
 				<li>Create the settings object with your app's values.<br/>
 					<pre class="prettyprint" style="width:600px;">
 var objectCommentSettings={
@@ -90,7 +109,8 @@ var objectCommentSettings={
 	},
 	COMMENT_URL:'/',
 	CURRENT_USER: currentUser,
-	COMMENTS: tempCommentsCollection 
+	COMMENTS_ARRAY: comments,
+	SET_TIME_STAMP: true
 }					</pre>
 
 				</li>
