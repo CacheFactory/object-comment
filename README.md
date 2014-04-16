@@ -3,9 +3,6 @@
 
 A backbone component to have user comments on any backbone model.
 
-Check a demo out at the [Project Site](https://process-smith.com/object-comment)
-
-
 
 ###Uses
 ---
